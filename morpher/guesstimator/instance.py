@@ -109,14 +109,35 @@ if __name__ == "__main__":
     from config_morpher import ConfigMorpher
 
     configs = {
-        "name": "claude-4-sonnet",
-        "api_key": "<YOUR_API_KEY>",
-        "model": "anthropic/claude-sonnet-4-20250514",
-        "temperature": 0,
-        "system_prompt": "你是一個 ai code assistant"
+        "models": {
+            "name": "claude-4-sonnet",
+            "api_key": "<YOUR_API_KEY>",
+            "model": "anthropic/claude-sonnet-4-20250514",
+            "temperature": 0,
+            "system_prompt": "你是一個 ai code assistant",
+        },
+        "tools": [
+            {
+                "type": "function",
+                "function": {
+                    "name": "load",
+                    "description": "Loads the content of a file as plain text given its file path.",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "file_path": {
+                                "type": "string",
+                                "description": "The path to the file to be loaded."
+                            }
+                        },
+                        "required": ["file_path"]
+                    }
+                }
+            }
+        ]
     }
 
-    config_morpher = ConfigMorpher.from_yaml('./configs/config.yaml')
+    config_morpher = ConfigMorpher(configs)
 
     completion_kwargs = config_morpher.morph(litellm.completion, start_from='models.[name=claude-4-sonnet]')
     tools = config_morpher.fetch('tools')
