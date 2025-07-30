@@ -1,0 +1,4 @@
+PyYAML
+litellm
+
+git+https://github.com/kenyo3026/configmorpher.git
