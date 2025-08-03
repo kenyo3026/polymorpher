@@ -2,6 +2,7 @@ import inspect
 import sys
 
 from .load import *
+from .search import *
 
 
 _current_module = sys.modules[__name__]

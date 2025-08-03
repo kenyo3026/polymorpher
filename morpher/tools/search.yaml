@@ -1,0 +1,23 @@
+- type: function
+  function:
+    name: search_file
+    description: Search for content patterns in files within a specified directory or single file. Supports workspace boundary checking to prevent unauthorized access outside the designated working directory.
+    parameters:
+      type: object
+      properties:
+        path:
+          type: string
+          description: The directory path to search recursively, or a specific file path to search. Can be relative or absolute path.
+        content_pattern:
+          type: string
+          description: Regular expression pattern to search for within file contents. Use standard regex syntax (e.g., "TODO", "import.*os", "def\s+\w+").
+        filepath_pattern:
+          type: string
+          description: File name pattern to filter which files to search. Supports glob patterns like "*.py", "*.txt", "config.*", or "*" for all files.
+        cwd:
+          type: string
+          description: Working directory (workspace root) for boundary checking. If not provided, uses current working directory. Search will be restricted to this workspace unless explicitly allowed.
+      required:
+        - path
+        - content_pattern
+        - filepath_pattern
