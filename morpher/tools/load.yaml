@@ -1,0 +1,12 @@
+- type: function
+  function:
+    name: load
+    description: Loads the content of a file as plain text given its file path.
+    parameters:
+      type: object
+      properties:
+        file_path:
+          type: string
+          description: The path to the file to be loaded.
+      required:
+        - file_path
