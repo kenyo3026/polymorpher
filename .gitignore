@@ -4,5 +4,8 @@ __pycache__
 # jupyter
 *.ipynb
 
+# schedule
+morpher/tools/*.md
+
 # directories
 configs/*
