@@ -1,9 +1,10 @@
 import json
 from dataclasses import dataclass
-from typing import List
+from typing import Union, List
 
 import litellm
 
+from verbose import *
 from morpher.tools import TOOL_FUNCS
 
 
@@ -13,6 +14,7 @@ class AgentRole:
     USER      :str = 'user'
     ASSISTANT :str = 'assistant'
     TOOL      :str = 'tool'
+
 
 @dataclass
 class ToolCallResponse:
@@ -30,9 +32,15 @@ class ToolCallResponse:
         message['content'] = self.form_content()
         return message
 
+
 class AgentMorpher:
 
-    def __init__(self, tools=None, **completion_kwargs):
+    def __init__(
+        self,
+        tools=None,
+        verbose_style:Union[str, VerboseStyle]=VerboseStyle.PRETTY,
+        **completion_kwargs
+    ):
         self.messages = []
         self.completion_kwargs = completion_kwargs
         self.tools = tools
@@ -45,11 +53,24 @@ class AgentMorpher:
                 }
             )
             self.tool_funcs = {
-                # name:func for name, func in TOOL_FUNCS.items()
-                # if name in self.tools
                 tool['function']['name']:TOOL_FUNCS[tool['function']['name']] for tool in self.tools \
                 if tool['function']['name'] in TOOL_FUNCS
             }
+        self.verbose_style = self._resolve_verbose_style(verbose_style)
+        self.verboser = VerboserFactory.get(self.verbose_style)
+
+    def _resolve_verbose_style(self, verbose_style):
+        """Convert verbose_style to string format"""
+        if isinstance(verbose_style, str):
+            if VerboseStyle.is_valid(verbose_style):
+                return verbose_style.lower()
+            else:
+                raise ValueError(
+                    f"Invalid verbose_style: {verbose_style}. "
+                    f"Valid options: {VerboseStyle.get_values()}"
+                )
+        else:
+            return verbose_style
 
     def init(self, system_prompt:str):
         if system_prompt:
@@ -101,7 +122,7 @@ class AgentMorpher:
         if not self.messages:
             return
         message = self.messages[-1]
-        print(message)
+        self.verboser.verbose_message(message)
 
 
 if __name__ == "__main__":
@@ -148,7 +169,11 @@ if __name__ == "__main__":
     completion_kwargs = config_morpher.morph(litellm.completion, start_from='models.[name=claude-4-sonnet]')
     tools = config_morpher.fetch('tools')
 
-    agent = AgentMorpher(tools=tools, **completion_kwargs)
+    agent = AgentMorpher(
+        tools=tools,
+        verbose_style='pretty',
+        **completion_kwargs,
+    )
     agent.init('You are a AI Coding Assistant')
     while True:
         agent.receive()
