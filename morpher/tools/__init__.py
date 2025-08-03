@@ -3,6 +3,7 @@ import sys
 
 from .load import *
 from .search import *
+from .attempt_completion import *
 
 
 _current_module = sys.modules[__name__]

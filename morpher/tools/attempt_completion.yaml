@@ -1,0 +1,11 @@
+- type: "function"
+  function:
+    name: "attempt_completion"
+    description: "Mark the current task as completed and stop the agent iteration. Use this when you have successfully completed the user's request."
+    parameters:
+      type: "object"
+      properties:
+        result:
+          type: "string"
+          description: "A brief description of what was accomplished and why the task is considered complete."
+      required: ["result"]
