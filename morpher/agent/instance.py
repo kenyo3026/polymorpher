@@ -106,38 +106,44 @@ class AgentMorpher:
 
 if __name__ == "__main__":
 
+    import os
     from config_morpher import ConfigMorpher
 
-    configs = {
-        "models": {
-            "name": "claude-4-sonnet",
-            "api_key": "<YOUR_API_KEY>",
-            "model": "anthropic/claude-sonnet-4-20250514",
-            "temperature": 0,
-            "system_prompt": "你是一個 ai code assistant",
-        },
-        "tools": [
-            {
-                "type": "function",
-                "function": {
-                    "name": "load",
-                    "description": "Loads the content of a file as plain text given its file path.",
-                    "parameters": {
-                        "type": "object",
-                        "properties": {
-                            "file_path": {
-                                "type": "string",
-                                "description": "The path to the file to be loaded."
-                            }
-                        },
-                        "required": ["file_path"]
+    DEMO_CONFIG_PATH = './configs/config.yaml'
+    if os.path.exists(DEMO_CONFIG_PATH):
+        configs = DEMO_CONFIG_PATH
+        config_morpher = ConfigMorpher.from_yaml(configs)
+    else:
+        api_key = str(input('Input your API key: '))
+        configs = {
+            "models": {
+                "name": "claude-4-sonnet",
+                "api_key": api_key,
+                "model": "anthropic/claude-sonnet-4-20250514",
+                "temperature": 0,
+                "system_prompt": "你是一個 ai code assistant",
+            },
+            "tools": [
+                {
+                    "type": "function",
+                    "function": {
+                        "name": "load",
+                        "description": "Loads the content of a file as plain text given its file path.",
+                        "parameters": {
+                            "type": "object",
+                            "properties": {
+                                "file_path": {
+                                    "type": "string",
+                                    "description": "The path to the file to be loaded."
+                                }
+                            },
+                            "required": ["file_path"]
+                        }
                     }
                 }
-            }
-        ]
-    }
-
-    config_morpher = ConfigMorpher(configs)
+            ]
+        }
+        config_morpher = ConfigMorpher(configs)
 
     completion_kwargs = config_morpher.morph(litellm.completion, start_from='models.[name=claude-4-sonnet]')
     tools = config_morpher.fetch('tools')
