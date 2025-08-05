@@ -130,6 +130,8 @@ if __name__ == "__main__":
     import os
     from config_morpher import ConfigMorpher
 
+    from prompts import *
+
     DEMO_CONFIG_PATH = './configs/config.yaml'
     if os.path.exists(DEMO_CONFIG_PATH):
         configs = DEMO_CONFIG_PATH
@@ -174,7 +176,7 @@ if __name__ == "__main__":
         verbose_style='pretty',
         **completion_kwargs,
     )
-    agent.init('You are a AI Coding Assistant')
+    agent.init(SystemPromptInstruction.format(tools=tools))
     while True:
         agent.receive()
         agent.complete()
