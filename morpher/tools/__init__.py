@@ -3,6 +3,7 @@ import sys
 
 from .load import *
 from .search import *
+from .search_and_replace import *
 from .attempt_completion import *
 
 

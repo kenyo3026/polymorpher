@@ -1,0 +1,35 @@
+- type: function
+  function:
+    name: search_and_replace
+    description: |
+      Search for specific text patterns in files and replace them with new content. 
+      This function performs exact string matching and replacement operations on text files.
+      Supports single-line and multi-line search patterns with precise control over execution modes.
+    parameters:
+      type: object
+      properties:
+        file:
+          type: string
+          description: Target file or directory path to search in
+        search:
+          type: string
+          description: Exact line(s) to find. Use '\n' for consecutive multi-line patterns
+        replace:
+          type: string
+          description: Replacement content. Can be multiline string or empty string for deletion
+        mode:
+          type: string
+          description: |
+            Execution mode:
+            - "preview": Show changes without modifying files (safe mode)
+            - "apply": Apply changes directly to files (modifies files)
+            - "preview_and_ask": Preview first, then ask user for confirmation
+          enum:
+            - preview
+            - apply
+            - preview_and_ask
+          default: preview_and_ask
+      required:
+        - file
+        - search
+        - replace
