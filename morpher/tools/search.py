@@ -49,17 +49,16 @@ def search_file(
         str or list: Search results
     """
     # Handle cwd
-    if not cwd:
-        cwd = os.getcwd()
-
-    if not os.path.exists(cwd):
+    cwd = Path(cwd or os.getcwd()).expanduser().resolve()
+    if not cwd.exists():
         raise FileNotFoundError(f"Working directory does not exist: {cwd}")
 
     # Handle path
-    path = Path(path).resolve()
+    path = Path(path).expanduser().resolve()
+    if not path.exists():
+        raise FileNotFoundError(f"Path does not exist: {path}")
 
-    # Check workspace boundaries
-    path_is_within_cwd = is_within_workspace(str(path), cwd)
+    path_is_within_cwd = is_within_workspace(path, cwd)
     if not enable_search_outside and not path_is_within_cwd:
         raise ValueError(f"Path '{path}' is outside workspace '{cwd}' and external search is disabled")
 
