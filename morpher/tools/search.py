@@ -3,6 +3,9 @@ import re
 import glob
 from pathlib import Path
 
+from utils.ext_patterns import EXT_PATTERNS_FOR_BASE_EXCLUDE
+
+
 def is_within_workspace(path: str, workspace_root: str) -> bool:
     """
     Determine whether the given path is inside the workspace directory.
@@ -70,10 +73,29 @@ def search_file(
     if path.is_file():
         files_to_search = [str(path)]
     elif path.is_dir():
-        # Use glob pattern to find matching files
-        search_pattern = os.path.join(str(path), "**", filepath_pattern)
-        files_to_search = glob.glob(search_pattern, recursive=True)
-        files_to_search = [f for f in files_to_search if os.path.isfile(f)]
+        # Use Path rglob with smart exclusion patterns
+        base_path = Path(path)
+        files_to_search = []
+
+        # Pre-process exclusion patterns for better performance
+        dir_patterns = [p.rstrip('/') for p in EXT_PATTERNS_FOR_BASE_EXCLUDE if p.endswith('/')]
+        file_patterns = [p.lstrip('*') for p in EXT_PATTERNS_FOR_BASE_EXCLUDE if not p.endswith('/')]
+
+        # Use rglob with filepath_pattern, then filter efficiently
+        for file_path in base_path.rglob(filepath_pattern):
+            if not file_path.is_file():
+                continue
+
+            # Quick directory exclusion check
+            path_parts = file_path.parts
+            if any(any(pattern in part for part in path_parts) for pattern in dir_patterns):
+                continue
+
+            # Quick filename exclusion check
+            if any(file_path.name.endswith(pattern) for pattern in file_patterns):
+                continue
+
+            files_to_search.append(str(file_path))
     else:
         raise FileNotFoundError(f"Path does not exist: {path}")
 
