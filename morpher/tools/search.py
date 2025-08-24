@@ -153,13 +153,6 @@ def format_results_to_pretty_str(
 
     return output
 
-# content = message.get('content', '')
-# if len(content) > self.max_tool_result_length:
-#     print(f"  {content[:self.max_tool_result_length]}...")
-#     print(f"  {color}[Content truncated - {len(content)} total chars]{self.reset_color}")
-# else:
-#     print(f"  {content}")
-
 # Usage examples
 if __name__ == "__main__":
     # Search for "TODO" in all Python files in current directory
