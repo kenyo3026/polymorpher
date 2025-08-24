@@ -17,6 +17,12 @@
         cwd:
           type: string
           description: Working directory (workspace root) for boundary checking. If not provided, uses current working directory. Search will be restricted to this workspace unless explicitly allowed.
+        only_filename:
+          type: boolean
+          description: |
+            If True, only return filename and match count; if False, return detailed content.
+            Set to True for initial exploration when you want a quick overview without detailed content,
+            especially useful for broad pattern searches (e.g., ".*") to avoid overwhelming results.
       required:
         - path
         - content_pattern
