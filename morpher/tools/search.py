@@ -4,8 +4,9 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import List
 
+from path_tree_graph import PathTree, PathTreeNode, TreeGraph
+
 from utils.ext_patterns import EXT_PATTERNS_FOR_BASE_EXCLUDE
-from utils.path_graph import PathTree, PathTreeNode, TreeGraph
 
 
 @dataclass
