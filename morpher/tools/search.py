@@ -6,7 +6,7 @@ from typing import List
 
 from path_tree_graph import PathTree, PathTreeNode, TreeGraph
 
-from utils.ext_patterns import EXT_PATTERNS_FOR_BASE_EXCLUDE
+from .utils.ext_patterns import EXT_PATTERNS_FOR_BASE_EXCLUDE
 
 
 @dataclass
