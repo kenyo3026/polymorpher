@@ -1,0 +1,21 @@
+- type: function
+  function:
+    name: execute_command
+    description: |
+      Execute a bash/shell command and return the formatted output including exit code and execution time.
+      This tool provides safe command execution with timeout protection and ignore file validation.
+      Useful for running tests, building projects, checking system status, or any shell operations.
+    parameters:
+      type: object
+      properties:
+        command:
+          type: string
+          description: |
+            The bash command to execute. Can be any valid shell command including:
+            - File operations (ls, cp, mv, rm)
+            - Build commands (npm install, pip install, make)
+            - Test commands (pytest, npm test, go test)
+            - System commands (ps, df, top)
+            - Git operations (git status, git commit)
+      required:
+        - command

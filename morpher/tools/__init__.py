@@ -6,6 +6,7 @@ from .search import *
 from .search_and_replace import *
 from .attempt_completion import *
 from .write import *
+from .execute import *
 
 
 _current_module = sys.modules[__name__]
