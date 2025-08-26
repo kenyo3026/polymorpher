@@ -231,7 +231,7 @@ def search_file(
     filepath_pattern: str = "*",
     cwd: str = None,
     max_matches_per_file: int = 10,
-    enable_search_outside: bool = False,
+    enable_search_outside: bool = True,
     as_text: bool = True,
     as_graph: bool = True,
     only_filename: bool = False,
